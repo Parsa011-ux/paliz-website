@@ -3,7 +3,8 @@ import Footer from "@/components/Footer";
 import NewsCard from "@/components/NewsCard";
 import { getLatestArticles } from "@/lib/turso";
 
-export const revalidate = 60;
+// Static Export - همه چیز در زمان Build تولید می‌شه
+export const dynamic = "force-static";
 
 export default async function HomePage() {
   const articles = await getLatestArticles(30);
