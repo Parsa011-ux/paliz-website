@@ -6,13 +6,22 @@ interface Props {
   featured?: boolean;
 }
 
-const CATEGORY_COLORS: Record<string, string> = {
-  "سیاسی": "text-blue-400",
-  "اقتصادی": "text-emerald-400",
-  "ورزشی": "text-orange-400",
-  "اجتماعی": "text-purple-400",
-  "نظامی": "text-red-400",
-  "فرهنگی": "text-pink-400",
+const CATEGORY_STYLES: Record<string, string> = {
+  "سیاسی": "bg-blue-500 text-white",
+  "اقتصادی": "bg-emerald-500 text-white",
+  "ورزشی": "bg-orange-500 text-white",
+  "اجتماعی": "bg-purple-500 text-white",
+  "نظامی": "bg-red-500 text-white",
+  "فرهنگی": "bg-pink-500 text-white",
+};
+
+const CATEGORY_EMOJI: Record<string, string> = {
+  "سیاسی": "🏛",
+  "اقتصادی": "💰",
+  "ورزشی": "⚽",
+  "اجتماعی": "👥",
+  "نظامی": "⚔️",
+  "فرهنگی": "🎭",
 };
 
 function timeAgo(dateStr: string): string {
@@ -35,7 +44,8 @@ function timeAgo(dateStr: string): string {
 }
 
 export default function NewsCard({ article, featured = false }: Props) {
-  const categoryColor = CATEGORY_COLORS[article.category] || "text-neutral-400";
+  const categoryStyle = CATEGORY_STYLES[article.category] || "bg-neutral-700 text-white";
+  const categoryEmoji = CATEGORY_EMOJI[article.category] || "📰";
   const isBreaking = article.is_breaking === 1;
 
   // ===== Featured Card =====
@@ -45,9 +55,8 @@ export default function NewsCard({ article, featured = false }: Props) {
         href={article.link}
         target="_blank"
         rel="noopener noreferrer"
-        className="group relative block h-[420px] md:h-[520px] rounded-3xl overflow-hidden bg-neutral-900 animate-fade-in"
+        className="group relative block h-[400px] md:h-[500px] rounded-3xl overflow-hidden bg-neutral-900 animate-fade-in"
       >
-        {/* Background Image */}
         {article.image_url ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img
@@ -60,40 +69,40 @@ export default function NewsCard({ article, featured = false }: Props) {
           <div className="absolute inset-0 bg-gradient-to-br from-neutral-800 via-neutral-900 to-black" />
         )}
 
-        {/* Gradient Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/70 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/80 to-transparent" />
 
-        {/* Content */}
-        <div className="absolute bottom-0 right-0 left-0 p-8 md:p-10">
-          {/* Badges */}
-          <div className="flex items-center gap-2 mb-4">
+        <div className="absolute bottom-0 right-0 left-0 p-6 md:p-10">
+          <div className="flex items-center gap-2 mb-4 flex-wrap">
             {isBreaking && (
-              <span className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-red-500 text-white text-xs font-bold pulse-breaking">
+              <span className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-red-500 text-white text-xs font-bold pulse-breaking">
                 <Zap className="w-3 h-3" fill="currentColor" />
                 فوری
               </span>
             )}
-            <span className={`px-3 py-1 rounded-full bg-white/10 backdrop-blur-md ${categoryColor} text-xs font-semibold border border-white/10`}>
-              {article.category}
+            <span className={`px-3 py-1.5 rounded-full text-xs font-bold ${categoryStyle} shadow-lg`}>
+              {categoryEmoji} {article.category}
             </span>
           </div>
 
-          {/* Title */}
-          <h2 className="text-2xl md:text-4xl font-bold text-white mb-4 line-clamp-3 group-hover:text-amber-400 transition-colors duration-300">
+          <h2 
+            className="text-2xl md:text-4xl font-bold text-white mb-4 group-hover:text-amber-400 transition-colors duration-300"
+            style={{ lineHeight: '1.6' }}
+          >
             {article.title_fa}
           </h2>
 
-          {/* Summary */}
-          {article.summary_fa && (
-            <p className="text-neutral-300 text-sm md:text-base line-clamp-2 mb-5 max-w-3xl leading-relaxed">
+          {article.summary_fa && article.summary_fa.length > 0 && (
+            <p 
+              className="text-neutral-200 text-sm md:text-base mb-5 max-w-3xl line-clamp-2"
+              style={{ lineHeight: '1.9' }}
+            >
               {article.summary_fa}
             </p>
           )}
 
-          {/* Meta */}
-          <div className="flex items-center gap-4 text-xs text-neutral-400">
-            <span className="font-medium">{article.source_name_fa}</span>
-            <span className="w-1 h-1 rounded-full bg-neutral-600"></span>
+          <div className="flex items-center gap-3 text-sm text-neutral-300 flex-wrap">
+            <span className="font-semibold">{article.source_name_fa}</span>
+            <span className="w-1 h-1 rounded-full bg-neutral-500"></span>
             <span className="flex items-center gap-1.5">
               <Clock className="w-3.5 h-3.5" />
               {timeAgo(article.created_at)}
@@ -110,10 +119,10 @@ export default function NewsCard({ article, featured = false }: Props) {
       href={article.link}
       target="_blank"
       rel="noopener noreferrer"
-      className="group flex flex-col h-full rounded-2xl overflow-hidden bg-neutral-950 border border-neutral-900 hover:border-neutral-800 transition-all duration-300 hover:-translate-y-1 animate-fade-in"
+      className="group flex flex-col h-full rounded-2xl overflow-hidden bg-neutral-900/60 border border-neutral-800 hover:border-neutral-600 hover:bg-neutral-900 transition-all duration-300 animate-fade-in"
     >
       {/* Image */}
-      <div className="relative h-52 overflow-hidden bg-neutral-900">
+      <div className="relative aspect-[16/10] overflow-hidden bg-neutral-800 flex-shrink-0">
         {article.image_url ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img
@@ -123,54 +132,49 @@ export default function NewsCard({ article, featured = false }: Props) {
             loading="lazy"
           />
         ) : (
-          <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-neutral-900 to-black">
-            <div className={`text-6xl opacity-20 ${categoryColor}`}>
-              {article.category === "سیاسی" && "🏛"}
-              {article.category === "اقتصادی" && "💰"}
-              {article.category === "ورزشی" && "⚽"}
-              {article.category === "اجتماعی" && "👥"}
-              {article.category === "نظامی" && "⚔️"}
-              {article.category === "فرهنگی" && "🎭"}
-            </div>
+          <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-neutral-800 to-neutral-950">
+            <span className="text-6xl opacity-30">{categoryEmoji}</span>
           </div>
         )}
 
-        {/* Breaking Badge */}
         {isBreaking && (
-          <div className="absolute top-3 right-3 flex items-center gap-1 px-2.5 py-1 rounded-full bg-red-500 text-white text-[10px] font-bold pulse-breaking">
+          <div className="absolute top-3 right-3 flex items-center gap-1 px-2.5 py-1 rounded-full bg-red-500 text-white text-[11px] font-bold pulse-breaking shadow-lg">
             <Zap className="w-2.5 h-2.5" fill="currentColor" />
             <span>فوری</span>
           </div>
         )}
 
-        {/* Category */}
-        <div className="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-black/60 backdrop-blur-md text-white text-[10px] font-semibold border border-white/10">
-          {article.category}
+        <div className={`absolute top-3 left-3 px-2.5 py-1 rounded-full text-[11px] font-bold ${categoryStyle} shadow-lg`}>
+          {categoryEmoji} {article.category}
         </div>
       </div>
 
       {/* Content */}
-      <div className="flex flex-col flex-1 p-5">
-        {/* Title */}
-        <h3 className="text-base font-bold text-white mb-3 line-clamp-2 group-hover:text-amber-400 transition-colors leading-relaxed">
+      <div className="flex flex-col flex-1 p-5 gap-3">
+        <h3 
+          className="text-base md:text-lg font-bold text-white line-clamp-2 group-hover:text-amber-400 transition-colors"
+          style={{ lineHeight: '1.8' }}
+        >
           {article.title_fa}
         </h3>
 
-        {/* Summary */}
-        {article.summary_fa && (
-          <p className="text-sm text-neutral-500 line-clamp-2 mb-4 leading-relaxed flex-1">
+        {article.summary_fa && article.summary_fa.length > 0 && (
+          <p 
+            className="text-sm text-neutral-400 line-clamp-2 flex-1"
+            style={{ lineHeight: '1.9' }}
+          >
             {article.summary_fa}
           </p>
         )}
 
-        {/* Footer */}
-        <div className="flex items-center justify-between pt-4 mt-auto border-t border-neutral-900">
-          <span className="text-xs font-medium text-neutral-400 line-clamp-1">
+        {/* Footer - Fixed padding for source name */}
+        <div className="flex items-center justify-between pt-3 mt-auto border-t border-neutral-800 text-xs gap-3">
+          <span className="font-medium text-neutral-300 min-w-0 flex-1 truncate">
             {article.source_name_fa}
           </span>
-          <span className="flex items-center gap-1 text-xs text-neutral-600 shrink-0 mr-3">
+          <span className="flex items-center gap-1 text-neutral-500 shrink-0">
             <Clock className="w-3 h-3" />
-            {timeAgo(article.created_at)}
+            <span className="whitespace-nowrap">{timeAgo(article.created_at)}</span>
           </span>
         </div>
       </div>

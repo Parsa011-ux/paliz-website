@@ -6,18 +6,13 @@ const vazirmatn = Vazirmatn({
   subsets: ["arabic"],
   variable: "--font-vazir",
   display: "swap",
+  weight: ["300", "400", "500", "600", "700", "800"],
 });
 
 export const metadata: Metadata = {
   title: "پالیز نیوز | آخرین اخبار ایران و جهان",
   description: "پالیز نیوز - آخرین اخبار سیاسی، اقتصادی، اجتماعی، ورزشی و فرهنگی از معتبرترین منابع خبری",
   keywords: ["اخبار ایران", "پالیز نیوز", "خبر فوری", "اخبار روز"],
-  openGraph: {
-    title: "پالیز نیوز",
-    description: "آخرین اخبار ایران و جهان",
-    locale: "fa_IR",
-    type: "website",
-  },
 };
 
 export default function RootLayout({
@@ -27,7 +22,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="fa" dir="rtl" className={vazirmatn.variable}>
-      <body className="antialiased">
+      <body className={`${vazirmatn.className} antialiased bg-neutral-950 text-neutral-100`}>
         {children}
       </body>
     </html>

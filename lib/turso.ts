@@ -125,3 +125,42 @@ export async function searchArticles(
     return [];
   }
 }
+// دریافت اخبار بر اساس دسته‌بندی
+export async function getArticlesByCategory(
+  category: string,
+  limit: number = 50
+): Promise<Article[]> {
+  try {
+    const result = await turso.execute({
+      sql: `
+        SELECT * FROM articles
+        WHERE category = ?
+        ORDER BY 
+          is_breaking DESC,
+          importance_score DESC,
+          created_at DESC
+        LIMIT ?
+      `,
+      args: [category, limit],
+    });
+
+    return result.rows.map((row) => row as unknown as Article);
+  } catch (error) {
+    console.error("خطا در دریافت اخبار دسته‌بندی:", error);
+    return [];
+  }
+}
+
+// دریافت لیست دسته‌بندی‌ها
+export async function getAllCategories(): Promise<string[]> {
+  try {
+    const result = await turso.execute({
+      sql: `SELECT DISTINCT category FROM articles WHERE category IS NOT NULL ORDER BY category`,
+      args: [],
+    });
+    return result.rows.map((row) => (row as any).category as string);
+  } catch (error) {
+    console.error("خطا:", error);
+    return [];
+  }
+}
