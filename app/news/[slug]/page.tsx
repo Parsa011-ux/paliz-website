@@ -79,183 +79,194 @@ export default async function NewsDetailPage({ params }: Props) {
     <div className="min-h-screen flex flex-col bg-neutral-950">
       <Header />
 
-      <main className="flex-1 site-container py-8 md:py-12">
-        <article className="max-w-4xl mx-auto">
-          {/* Breadcrumb */}
-          <nav className="flex items-center gap-2 text-sm text-neutral-500 mb-6 flex-wrap">
-            <Link href="/" className="hover:text-amber-400 transition-colors">
-              خانه
-            </Link>
-            <span>/</span>
-            {categoryInfo && (
-              <>
+      <main className="flex-1 py-8 md:py-12" style={{ width: "100%" }}>
+        <div
+          style={{
+            maxWidth: "900px",
+            width: "100%",
+            marginLeft: "auto",
+            marginRight: "auto",
+            paddingLeft: "1rem",
+            paddingRight: "1rem",
+          }}
+        >
+          <article>
+            {/* Breadcrumb */}
+            <nav className="flex items-center gap-2 text-sm text-neutral-500 mb-6 flex-wrap">
+              <Link href="/" className="hover:text-amber-400 transition-colors">
+                خانه
+              </Link>
+              <span>/</span>
+              {categoryInfo && (
+                <>
+                  <Link
+                    href={`/category/${article.category}`}
+                    className="hover:text-amber-400 transition-colors"
+                  >
+                    {categoryInfo.emoji} {categoryInfo.name}
+                  </Link>
+                  <span>/</span>
+                </>
+              )}
+              <span className="text-neutral-400 truncate">
+                {article.title_fa}
+              </span>
+            </nav>
+
+            {/* Breaking Badge */}
+            {article.is_breaking === 1 && (
+              <div className="inline-flex items-center gap-2 mb-4 px-4 py-2 rounded-full bg-red-500/10 border border-red-500/30">
+                <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse"></span>
+                <span className="text-red-400 font-bold text-sm">
+                  🔴 خبر فوری
+                </span>
+              </div>
+            )}
+
+            {/* Category & Date */}
+            <div className="flex items-center gap-3 mb-4 flex-wrap">
+              {categoryInfo && (
                 <Link
                   href={`/category/${article.category}`}
-                  className="hover:text-amber-400 transition-colors"
+                  className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-amber-500/10 text-amber-400 text-sm hover:bg-amber-500/20 transition-colors"
                 >
-                  {categoryInfo.emoji} {categoryInfo.name}
+                  <span>{categoryInfo.emoji}</span>
+                  <span>{categoryInfo.name}</span>
                 </Link>
-                <span>/</span>
-              </>
-            )}
-            <span className="text-neutral-400 truncate">
+              )}
+              {publishDate && (
+                <span className="text-sm text-neutral-500">
+                  📅 {publishDate}
+                </span>
+              )}
+            </div>
+
+            {/* Title */}
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-6 leading-tight">
               {article.title_fa}
-            </span>
-          </nav>
+            </h1>
 
-          {/* Breaking Badge */}
-          {article.is_breaking === 1 && (
-            <div className="inline-flex items-center gap-2 mb-4 px-4 py-2 rounded-full bg-red-500/10 border border-red-500/30">
-              <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse"></span>
-              <span className="text-red-400 font-bold text-sm">
-                🔴 خبر فوری
-              </span>
-            </div>
-          )}
-
-          {/* Category & Date */}
-          <div className="flex items-center gap-3 mb-4 flex-wrap">
-            {categoryInfo && (
-              <Link
-                href={`/category/${article.category}`}
-                className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-amber-500/10 text-amber-400 text-sm hover:bg-amber-500/20 transition-colors"
-              >
-                <span>{categoryInfo.emoji}</span>
-                <span>{categoryInfo.name}</span>
-              </Link>
-            )}
-            {publishDate && (
-              <span className="text-sm text-neutral-500">
-                📅 {publishDate}
-              </span>
-            )}
-          </div>
-
-          {/* Title */}
-          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-6 leading-tight">
-            {article.title_fa}
-          </h1>
-
-          {/* Source & Views */}
-          <div className="flex items-center justify-between flex-wrap gap-3 pb-6 mb-6 border-b border-neutral-800">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-amber-500 to-orange-500 flex items-center justify-center text-white font-bold">
-                {article.source_name_fa?.[0] ||
-                  article.source_name?.[0] ||
-                  "پ"}
-              </div>
-              <div>
-                <div className="text-white font-medium text-sm">
-                  {article.source_name_fa || article.source_name}
+            {/* Source & Views */}
+            <div className="flex items-center justify-between flex-wrap gap-3 pb-6 mb-6 border-b border-neutral-800">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-amber-500 to-orange-500 flex items-center justify-center text-white font-bold">
+                  {article.source_name_fa?.[0] ||
+                    article.source_name?.[0] ||
+                    "پ"}
                 </div>
-                <div className="text-neutral-500 text-xs">منبع خبر</div>
+                <div>
+                  <div className="text-white font-medium text-sm">
+                    {article.source_name_fa || article.source_name}
+                  </div>
+                  <div className="text-neutral-500 text-xs">منبع خبر</div>
+                </div>
+              </div>
+              <div className="flex items-center gap-4 text-sm text-neutral-500">
+                <span>
+                  👁 {article.view_count.toLocaleString("fa-IR")} بازدید
+                </span>
+                <span>⭐ اهمیت: {article.importance_score}/10</span>
               </div>
             </div>
-            <div className="flex items-center gap-4 text-sm text-neutral-500">
-              <span>
-                👁 {article.view_count.toLocaleString("fa-IR")} بازدید
-              </span>
-              <span>⭐ اهمیت: {article.importance_score}/10</span>
-            </div>
-          </div>
 
-          {/* Featured Image */}
-          {article.image_url && (
-            <div className="relative w-full aspect-video mb-8 rounded-2xl overflow-hidden bg-neutral-900">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={article.image_url}
-                alt={article.title_fa}
-                className="w-full h-full object-cover"
-                loading="eager"
-              />
-            </div>
-          )}
+            {/* Featured Image */}
+            {article.image_url && (
+              <div className="relative w-full aspect-video mb-8 rounded-2xl overflow-hidden bg-neutral-900">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={article.image_url}
+                  alt={article.title_fa}
+                  className="w-full h-full object-cover"
+                  loading="eager"
+                />
+              </div>
+            )}
 
-          {/* Summary (خلاصه پررنگ) */}
-          {article.summary_fa && (
-            <div className="mb-8 p-6 rounded-2xl bg-gradient-to-br from-amber-500/10 to-orange-500/5 border border-amber-500/20">
-              <p
-                className="text-lg md:text-xl text-neutral-100 font-medium"
-                style={{ lineHeight: "2" }}
-              >
-                {article.summary_fa}
-              </p>
-            </div>
-          )}
-
-          {/* Content - متن کامل ترجمه شده */}
-          {paragraphs.length > 0 && (
-            <div className="mb-10">
-              <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
-                <span className="w-1 h-6 bg-gradient-to-b from-amber-400 to-orange-500 rounded-full"></span>
-                متن کامل خبر
-              </h3>
-              {paragraphs.map((paragraph, index) => (
+            {/* Summary (خلاصه پررنگ) */}
+            {article.summary_fa && (
+              <div className="mb-8 p-6 rounded-2xl bg-gradient-to-br from-amber-500/10 to-orange-500/5 border border-amber-500/20">
                 <p
-                  key={index}
-                  className="text-base md:text-lg text-neutral-300 mb-6"
-                  style={{ lineHeight: "2.2" }}
+                  className="text-lg md:text-xl text-neutral-100 font-medium"
+                  style={{ lineHeight: "2" }}
                 >
-                  {paragraph}
+                  {article.summary_fa}
                 </p>
-              ))}
+              </div>
+            )}
+
+            {/* Content - متن کامل ترجمه شده */}
+            {paragraphs.length > 0 && (
+              <div className="mb-10">
+                <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
+                  <span className="w-1 h-6 bg-gradient-to-b from-amber-400 to-orange-500 rounded-full"></span>
+                  متن کامل خبر
+                </h3>
+                {paragraphs.map((paragraph, index) => (
+                  <p
+                    key={index}
+                    className="text-base md:text-lg text-neutral-300 mb-6"
+                    style={{ lineHeight: "2.2" }}
+                  >
+                    {paragraph}
+                  </p>
+                ))}
+              </div>
+            )}
+
+            {/* Source Button */}
+            <div className="mt-10 p-6 rounded-2xl bg-neutral-900 border border-neutral-800">
+              <p className="text-neutral-400 text-sm mb-3">
+                برای مطالعه متن اصلی و کامل خبر به منبع مراجعه کنید:
+              </p>
+              <a
+                href={article.link}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 text-white font-bold hover:from-amber-600 hover:to-orange-600 transition-all"
+              >
+                <span>
+                  📖 مشاهده در {article.source_name_fa || article.source_name}
+                </span>
+                <svg
+                  className="w-4 h-4"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+                  />
+                </svg>
+              </a>
             </div>
-          )}
 
-          {/* Source Button */}
-          <div className="mt-10 p-6 rounded-2xl bg-neutral-900 border border-neutral-800">
-            <p className="text-neutral-400 text-sm mb-3">
-              برای مطالعه متن اصلی و کامل خبر به منبع مراجعه کنید:
-            </p>
-            <a
-              href={article.link}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 text-white font-bold hover:from-amber-600 hover:to-orange-600 transition-all"
-            >
-              <span>
-                📖 مشاهده در {article.source_name_fa || article.source_name}
-              </span>
-              <svg
-                className="w-4 h-4"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
+            {/* Back to Home */}
+            <div className="mt-8 text-center">
+              <Link
+                href="/"
+                className="inline-flex items-center gap-2 text-neutral-400 hover:text-amber-400 transition-colors"
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-                />
-              </svg>
-            </a>
-          </div>
-
-          {/* Back to Home */}
-          <div className="mt-8 text-center">
-            <Link
-              href="/"
-              className="inline-flex items-center gap-2 text-neutral-400 hover:text-amber-400 transition-colors"
-            >
-              <svg
-                className="w-4 h-4"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M10 19l-7-7m0 0l7-7m-7 7h18"
-                />
-              </svg>
-              <span>بازگشت به صفحه اصلی</span>
-            </Link>
-          </div>
-        </article>
+                <svg
+                  className="w-4 h-4"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M10 19l-7-7m0 0l7-7m-7 7h18"
+                  />
+                </svg>
+                <span>بازگشت به صفحه اصلی</span>
+              </Link>
+            </div>
+          </article>
+        </div>
       </main>
 
       <Footer />
