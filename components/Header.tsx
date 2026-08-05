@@ -25,7 +25,7 @@ export default function Header() {
         <div className="site-container">
           {/* Top Bar with Search only */}
           <div className="flex items-center justify-end py-2 border-b border-neutral-900/50">
-            <Link 
+            <Link
               href="/search"
               className="group flex items-center gap-2 px-4 py-2 rounded-xl bg-neutral-900 hover:bg-gradient-to-r hover:from-amber-500 hover:to-orange-600 border border-neutral-800 hover:border-transparent transition-all duration-300"
             >
@@ -54,16 +54,19 @@ export default function Header() {
       </div>
 
       {/* Categories Bar - Sticky */}
-      <nav 
+      <nav
         className={`sticky top-0 z-40 bg-black/95 backdrop-blur-xl border-b border-neutral-800/50 transition-shadow duration-300 ${
-          scrolled ? 'shadow-lg shadow-black/50' : ''
+          scrolled ? "shadow-lg shadow-black/50" : ""
         }`}
       >
         <div className="site-container">
-          <div className="flex items-center justify-center gap-1 py-3 overflow-x-auto scrollbar-hide">
+          <div className="category-nav scrollbar-hide">
             {/* Small Logo (when scrolled) */}
             {scrolled && (
-              <Link href="/" className="flex items-center gap-2 mr-4 shrink-0 animate-fade-in">
+              <Link
+                href="/"
+                className="flex items-center gap-2 ml-2 shrink-0 animate-fade-in"
+              >
                 <div className="relative w-10 h-10">
                   <Image
                     src="/logo.png"
@@ -74,7 +77,7 @@ export default function Header() {
                 </div>
               </Link>
             )}
-            
+
             {CATEGORIES.map((cat) => (
               <Link
                 key={cat.slug}
