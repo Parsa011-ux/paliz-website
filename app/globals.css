@@ -31,7 +31,6 @@ body {
   overflow-x: hidden;
 }
 
-/* پس‌زمینه با طرح ظریف */
 body::before {
   content: '';
   position: fixed;
@@ -75,7 +74,6 @@ a {
   text-decoration: none;
 }
 
-/* Scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
@@ -102,7 +100,6 @@ a {
   scrollbar-width: none;
 }
 
-/* Animations */
 @keyframes pulse-red {
   0%, 100% { 
     opacity: 1; 
@@ -122,15 +119,6 @@ a {
   to {
     opacity: 1;
     transform: translateY(0);
-  }
-}
-
-@keyframes ticker-infinite {
-  0% {
-    transform: translateX(0);
-  }
-  100% {
-    transform: translateX(-50%);
   }
 }
 
@@ -155,33 +143,68 @@ a {
   animation: glow 3s ease-in-out infinite;
 }
 
-/* News Ticker - Infinite Loop */
-.ticker-container {
+/* Marquee - Infinite Loop */
+.marquee-container {
+  display: flex;
   overflow: hidden;
-  white-space: nowrap;
+  user-select: none;
+  gap: 0;
+  flex: 1;
   position: relative;
-  mask-image: linear-gradient(to left, transparent, black 3%, black 97%, transparent);
-  -webkit-mask-image: linear-gradient(to left, transparent, black 3%, black 97%, transparent);
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent,
+    #000 5%,
+    #000 95%,
+    transparent
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    #000 5%,
+    #000 95%,
+    transparent
+  );
 }
 
-.ticker-move {
-  display: inline-flex;
-  animation: ticker-infinite 90s linear infinite;
-  will-change: transform;
+.marquee-content {
+  flex-shrink: 0;
+  display: flex;
+  justify-content: space-around;
+  min-width: 100%;
+  animation: scroll 60s linear infinite;
+  gap: 3rem;
+  padding: 0 1.5rem;
 }
 
-.ticker-group {
+.marquee-item {
   display: inline-flex;
   align-items: center;
-  padding-right: 4rem;
-  flex-shrink: 0;
+  gap: 0.75rem;
+  color: rgba(255, 255, 255, 0.95);
+  font-size: 0.95rem;
+  font-weight: 500;
+  white-space: nowrap;
+  transition: color 0.2s;
 }
 
-.ticker-container:hover .ticker-move {
+.marquee-item:hover {
+  color: #fbbf24;
+}
+
+.marquee-container:hover .marquee-content {
   animation-play-state: paused;
 }
 
-/* Line Clamp */
+@keyframes scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-100%);
+  }
+}
+
 .line-clamp-1 {
   display: -webkit-box;
   -webkit-line-clamp: 1;
@@ -217,7 +240,6 @@ a {
   border-radius: 6px;
 }
 
-/* Container */
 .site-container {
   width: 100%;
   max-width: 1320px;
@@ -241,7 +263,6 @@ a {
   }
 }
 
-/* Category colors */
 .cat-سیاسی { color: #60a5fa; }
 .cat-اقتصادی { color: #34d399; }
 .cat-ورزشی { color: #fb923c; }
@@ -256,7 +277,6 @@ a {
 .cat-bg-نظامی { background: linear-gradient(135deg, #ef4444, #dc2626); }
 .cat-bg-فرهنگی { background: linear-gradient(135deg, #ec4899, #db2777); }
 
-/* Progress Bar */
 .progress-bar {
   position: fixed;
   top: 0;
@@ -282,7 +302,6 @@ a {
   100% { background-position: 200% 50%; }
 }
 
-/* Cards */
 .card-glow {
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -292,7 +311,6 @@ a {
   box-shadow: 0 20px 40px -15px rgba(245, 158, 11, 0.2);
 }
 
-/* Nav Link (Original) */
 .nav-link {
   position: relative;
   padding: 0.75rem 1.25rem;
@@ -331,7 +349,6 @@ a {
   width: 60%;
 }
 
-/* Nav Link Large (Center) */
 .nav-link-large {
   position: relative;
   padding: 0.75rem 1.5rem;
