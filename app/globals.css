@@ -20,18 +20,42 @@ body {
   min-height: 100vh;
   font-family: var(--font-vazir), "Vazirmatn", Tahoma, Arial, sans-serif;
   font-optical-sizing: auto;
-  font-variation-settings: "wght" 400;
-  background-color: #0a0a0a;
+  background-color: #0a0a0f;
   color: #fafafa;
   line-height: 1.8;
   letter-spacing: -0.01em;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* پس‌زمینه با طرح ظریف */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
   background-image: 
-    radial-gradient(ellipse 800px 400px at 50% -100px, rgba(245, 158, 11, 0.05), transparent),
-    radial-gradient(ellipse 600px 300px at 100% 100%, rgba(239, 68, 68, 0.03), transparent);
-  background-attachment: fixed;
+    radial-gradient(circle at 15% 20%, rgba(245, 158, 11, 0.06) 0%, transparent 40%),
+    radial-gradient(circle at 85% 80%, rgba(239, 68, 68, 0.04) 0%, transparent 40%),
+    radial-gradient(circle at 50% 50%, rgba(139, 92, 246, 0.03) 0%, transparent 60%);
+  z-index: -2;
+  pointer-events: none;
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: 
+    linear-gradient(rgba(255, 255, 255, 0.015) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
+  background-size: 60px 60px;
+  z-index: -1;
+  pointer-events: none;
+  mask-image: radial-gradient(ellipse at center, black 30%, transparent 100%);
+  -webkit-mask-image: radial-gradient(ellipse at center, black 30%, transparent 100%);
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -42,18 +66,13 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 p {
-  color: #d4d4d4;
+  color: #d4d4d8;
   font-weight: 400;
 }
 
 a {
   color: inherit;
   text-decoration: none;
-}
-
-/* Persian Number Fix */
-.persian-numbers {
-  font-feature-settings: "ss02" 1, "ss03" 1;
 }
 
 /* Scrollbar */
@@ -63,16 +82,16 @@ a {
 }
 
 ::-webkit-scrollbar-track {
-  background: #0a0a0a;
+  background: #0a0a0f;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #404040;
+  background: linear-gradient(180deg, #f59e0b, #ef4444);
   border-radius: 100px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #525252;
+  background: linear-gradient(180deg, #fbbf24, #f87171);
 }
 
 .scrollbar-hide::-webkit-scrollbar {
@@ -83,6 +102,7 @@ a {
   scrollbar-width: none;
 }
 
+/* Animations */
 @keyframes pulse-red {
   0%, 100% { 
     opacity: 1; 
@@ -105,6 +125,24 @@ a {
   }
 }
 
+@keyframes ticker-slow {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes glow {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(245, 158, 11, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(245, 158, 11, 0.5);
+  }
+}
+
 .pulse-breaking {
   animation: pulse-red 2s ease-in-out infinite;
 }
@@ -113,6 +151,32 @@ a {
   animation: fade-in-up 0.6s ease-out forwards;
 }
 
+.animate-glow {
+  animation: glow 3s ease-in-out infinite;
+}
+
+/* News Ticker */
+.ticker-wrapper {
+  overflow: hidden;
+  white-space: nowrap;
+  position: relative;
+  mask-image: linear-gradient(to left, transparent, black 5%, black 95%, transparent);
+  -webkit-mask-image: linear-gradient(to left, transparent, black 5%, black 95%, transparent);
+}
+
+.ticker-track-slow {
+  display: inline-flex;
+  animation: ticker-slow 120s linear infinite;
+  gap: 4rem;
+  padding-left: 4rem;
+  padding-right: 4rem;
+}
+
+.ticker-wrapper:hover .ticker-track-slow {
+  animation-play-state: paused;
+}
+
+/* Line Clamp */
 .line-clamp-1 {
   display: -webkit-box;
   -webkit-line-clamp: 1;
@@ -148,9 +212,10 @@ a {
   border-radius: 6px;
 }
 
+/* Container */
 .site-container {
   width: 100%;
-  max-width: 1280px;
+  max-width: 1320px;
   margin-left: auto;
   margin-right: auto;
   padding-left: 1rem;
@@ -169,4 +234,141 @@ a {
     padding-left: 2rem;
     padding-right: 2rem;
   }
+}
+
+/* Category colors */
+.cat-سیاسی { color: #60a5fa; }
+.cat-اقتصادی { color: #34d399; }
+.cat-ورزشی { color: #fb923c; }
+.cat-اجتماعی { color: #c084fc; }
+.cat-نظامی { color: #f87171; }
+.cat-فرهنگی { color: #f472b6; }
+
+.cat-bg-سیاسی { background: linear-gradient(135deg, #3b82f6, #2563eb); }
+.cat-bg-اقتصادی { background: linear-gradient(135deg, #10b981, #059669); }
+.cat-bg-ورزشی { background: linear-gradient(135deg, #f97316, #ea580c); }
+.cat-bg-اجتماعی { background: linear-gradient(135deg, #a855f7, #9333ea); }
+.cat-bg-نظامی { background: linear-gradient(135deg, #ef4444, #dc2626); }
+.cat-bg-فرهنگی { background: linear-gradient(135deg, #ec4899, #db2777); }
+
+/* Progress Bar */
+.progress-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: transparent;
+  z-index: 100;
+  pointer-events: none;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #f59e0b, #ef4444, #a855f7);
+  background-size: 200% 100%;
+  animation: gradient-shift 3s linear infinite;
+  transition: width 0.1s ease-out;
+  box-shadow: 0 0 10px rgba(245, 158, 11, 0.5);
+}
+
+@keyframes gradient-shift {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 200% 50%; }
+}
+
+/* Cards */
+.card-glow {
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.card-glow:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 40px -15px rgba(245, 158, 11, 0.2);
+}
+
+/* Nav Link (Original) */
+.nav-link {
+  position: relative;
+  padding: 0.75rem 1.25rem;
+  color: #d4d4d8;
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: color 0.3s;
+}
+
+.nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #f59e0b, #ef4444);
+  border-radius: 3px;
+  transition: width 0.3s ease;
+}
+
+.nav-link:hover {
+  color: #ffffff;
+}
+
+.nav-link:hover::after {
+  width: 60%;
+}
+
+.nav-link.active {
+  color: #f59e0b;
+}
+
+.nav-link.active::after {
+  width: 60%;
+}
+
+/* Nav Link Large (Center) */
+.nav-link-large {
+  position: relative;
+  padding: 0.75rem 1.5rem;
+  color: #e5e5e5;
+  font-weight: 700;
+  font-size: 1rem;
+  transition: color 0.3s;
+  letter-spacing: 0.02em;
+}
+
+@media (min-width: 768px) {
+  .nav-link-large {
+    padding: 0.75rem 1.75rem;
+    font-size: 1.1rem;
+  }
+}
+
+.nav-link-large::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #f59e0b, #ef4444);
+  border-radius: 3px;
+  transition: width 0.3s ease;
+}
+
+.nav-link-large:hover {
+  color: #f59e0b;
+}
+
+.nav-link-large:hover::after {
+  width: 70%;
+}
+
+.nav-link-large.active {
+  color: #f59e0b;
+}
+
+.nav-link-large.active::after {
+  width: 70%;
 }

@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
 import { Vazirmatn } from "next/font/google";
 import "./globals.css";
+import ProgressBar from "@/components/ProgressBar";
 
 const vazirmatn = Vazirmatn({
   subsets: ["arabic"],
   variable: "--font-vazir",
   display: "swap",
-  weight: ["300", "400", "500", "600", "700", "800"],
+  weight: ["300", "400", "500", "600", "700", "800", "900"],
 });
 
 export const metadata: Metadata = {
@@ -22,7 +23,8 @@ export default function RootLayout({
 }) {
   return (
     <html lang="fa" dir="rtl" className={vazirmatn.variable}>
-      <body className={`${vazirmatn.className} antialiased bg-neutral-950 text-neutral-100`}>
+      <body className={`${vazirmatn.className} antialiased`}>
+        <ProgressBar />
         {children}
       </body>
     </html>
