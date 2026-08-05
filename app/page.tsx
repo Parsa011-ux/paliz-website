@@ -10,7 +10,7 @@ export const dynamic = "force-static";
 export default async function HomePage() {
   const [articles, breakingNews] = await Promise.all([
     getLatestArticles(30),
-    getBreakingNews(10),
+    getBreakingNews(10), // فقط 10 خبر فوری آخر
   ]);
 
   const featuredArticle = articles[0];
