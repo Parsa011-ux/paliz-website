@@ -1,4 +1,5 @@
 import { Clock, Zap } from "lucide-react";
+import Link from "next/link";
 import type { Article } from "@/lib/types";
 
 interface Props {
@@ -22,14 +23,49 @@ function timeAgo(dateStr: string): string {
   }
 }
 
+// تشخیص اینکه خبر باید داخلی باز شه یا خارجی
+function hasInternalPage(article: Article): boolean {
+  return !!(article.content_fa && article.content_fa.length > 100);
+}
+
+// کامپوننت Wrapper هوشمند - داخلی یا خارجی
+function SmartLink({
+  article,
+  className,
+  children,
+  style,
+}: {
+  article: Article;
+  className: string;
+  children: React.ReactNode;
+  style?: React.CSSProperties;
+}) {
+  if (hasInternalPage(article)) {
+    return (
+      <Link href={`/news/${article.slug}`} className={className} style={style}>
+        {children}
+      </Link>
+    );
+  }
+  return (
+    <a
+      href={article.link}
+      target="_blank"
+      rel="noopener noreferrer"
+      className={className}
+      style={style}
+    >
+      {children}
+    </a>
+  );
+}
+
 export default function HeroSection({ featured, secondary }: Props) {
   return (
     <section className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6 mb-12">
       {/* Featured - Left Big */}
-      <a
-        href={featured.link}
-        target="_blank"
-        rel="noopener noreferrer"
+      <SmartLink
+        article={featured}
         className="lg:col-span-2 group relative block h-[400px] md:h-[520px] rounded-2xl overflow-hidden bg-neutral-900 animate-fade-in card-glow"
       >
         {featured.image_url ? (
@@ -59,7 +95,7 @@ export default function HeroSection({ featured, secondary }: Props) {
             </span>
           </div>
 
-          <h2 
+          <h2
             className="text-2xl md:text-4xl font-black text-white mb-3 group-hover:text-amber-400 transition-colors line-clamp-3"
             style={{ lineHeight: '1.5' }}
           >
@@ -67,7 +103,7 @@ export default function HeroSection({ featured, secondary }: Props) {
           </h2>
 
           {featured.summary_fa && (
-            <p 
+            <p
               className="text-neutral-200 text-sm md:text-base mb-4 line-clamp-2 max-w-3xl"
               style={{ lineHeight: '1.8' }}
             >
@@ -84,16 +120,14 @@ export default function HeroSection({ featured, secondary }: Props) {
             </span>
           </div>
         </div>
-      </a>
+      </SmartLink>
 
       {/* Secondary - Right List */}
       <div className="flex flex-col gap-4 h-[400px] md:h-[520px]">
         {secondary.slice(0, 3).map((article, index) => (
-          <a
+          <SmartLink
             key={article.id}
-            href={article.link}
-            target="_blank"
-            rel="noopener noreferrer"
+            article={article}
             className="group relative flex-1 block rounded-xl overflow-hidden bg-neutral-900 card-glow"
             style={{ animationDelay: `${index * 100}ms` }}
           >
@@ -123,7 +157,7 @@ export default function HeroSection({ featured, secondary }: Props) {
                 </span>
               </div>
 
-              <h3 
+              <h3
                 className="text-white text-sm md:text-base font-bold line-clamp-2 group-hover:text-amber-400 transition-colors"
                 style={{ lineHeight: '1.7' }}
               >
@@ -136,7 +170,7 @@ export default function HeroSection({ featured, secondary }: Props) {
                 <span>{timeAgo(article.created_at)}</span>
               </div>
             </div>
-          </a>
+          </SmartLink>
         ))}
       </div>
     </section>
