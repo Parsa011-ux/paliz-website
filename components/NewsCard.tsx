@@ -1,4 +1,5 @@
 import { Clock, Zap } from "lucide-react";
+import Link from "next/link";
 import type { Article } from "@/lib/types";
 
 interface Props {
@@ -26,14 +27,20 @@ function timeAgo(dateStr: string): string {
 
 export default function NewsCard({ article }: Props) {
   const isBreaking = article.is_breaking === 1;
+  
+  // اگر خبر content_fa داره → لینک داخلی
+  // اگه نداره → لینک به منبع اصلی
+  const hasFullContent = article.content_fa && article.content_fa.length > 100;
+  const linkProps = hasFullContent
+    ? { href: `/news/${article.slug}` as const }
+    : {
+        href: article.link,
+        target: "_blank" as const,
+        rel: "noopener noreferrer" as const,
+      };
 
-  return (
-    <a
-      href={article.link}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="group flex flex-col h-full rounded-2xl overflow-hidden bg-neutral-900/80 border border-neutral-800/80 hover:border-neutral-700 transition-all duration-300 animate-fade-in card-glow backdrop-blur-sm"
-    >
+  const CardContent = (
+    <>
       {/* Image */}
       <div className="relative aspect-[16/10] overflow-hidden bg-neutral-800 flex-shrink-0">
         {article.image_url ? (
@@ -62,11 +69,21 @@ export default function NewsCard({ article }: Props) {
         <div className={`cat-bg-${article.category} absolute top-3 left-3 px-2.5 py-1 rounded-md text-white text-[10px] font-bold shadow-lg`}>
           {article.category}
         </div>
+
+        {/* نشانگر لینک خارجی */}
+        {!hasFullContent && (
+          <div className="absolute bottom-3 left-3 flex items-center gap-1 px-2 py-1 rounded-md bg-black/70 backdrop-blur-sm text-white text-[10px] font-bold">
+            <svg className="w-2.5 h-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+            </svg>
+            <span>منبع</span>
+          </div>
+        )}
       </div>
 
       {/* Content */}
       <div className="flex flex-col flex-1 p-5 gap-3">
-        <h3 
+        <h3
           className="text-base md:text-lg font-bold text-white line-clamp-2 group-hover:text-amber-400 transition-colors"
           style={{ lineHeight: '1.7' }}
         >
@@ -74,7 +91,7 @@ export default function NewsCard({ article }: Props) {
         </h3>
 
         {article.summary_fa && article.summary_fa.length > 0 && (
-          <p 
+          <p
             className="text-sm text-neutral-400 line-clamp-2 flex-1"
             style={{ lineHeight: '1.9' }}
           >
@@ -92,6 +109,24 @@ export default function NewsCard({ article }: Props) {
           </span>
         </div>
       </div>
+    </>
+  );
+
+  const cardClass = "group flex flex-col h-full rounded-2xl overflow-hidden bg-neutral-900/80 border border-neutral-800/80 hover:border-neutral-700 transition-all duration-300 animate-fade-in card-glow backdrop-blur-sm";
+
+  // اگر لینک داخلی → از Next Link
+  if (hasFullContent) {
+    return (
+      <Link href={linkProps.href} className={cardClass}>
+        {CardContent}
+      </Link>
+    );
+  }
+
+  // اگه لینک خارجی → از <a>
+  return (
+    <a {...linkProps} className={cardClass}>
+      {CardContent}
     </a>
   );
 }
