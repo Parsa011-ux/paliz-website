@@ -143,7 +143,7 @@ a {
   animation: glow 3s ease-in-out infinite;
 }
 
-/* Marquee - Infinite Loop */
+/* Marquee - Infinite Loop (RTL - Right to Left) */
 .marquee-container {
   display: flex;
   overflow: hidden;
@@ -201,7 +201,7 @@ a {
     transform: translateX(0);
   }
   to {
-    transform: translateX(-100%);
+    transform: translateX(100%);
   }
 }
 
