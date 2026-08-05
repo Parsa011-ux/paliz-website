@@ -4,17 +4,18 @@ import { getArticleBySlug, getLatestArticles } from "@/lib/turso";
 import { CATEGORIES } from "@/lib/types";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import Image from "next/image";
 
 export const dynamic = "force-static";
 export const dynamicParams = false;
 
-// تولید Static Params برای همه اخبار در زمان Build
+// فقط 100 خبر آخر که content_fa دارن → صفحه داخلی می‌گیرن
 export async function generateStaticParams() {
-  const articles = await getLatestArticles(200);
-  return articles.map((article) => ({
-    slug: article.slug,
-  }));
+  const articles = await getLatestArticles(100);
+  return articles
+    .filter((a) => a.content_fa && a.content_fa.length > 100 && a.slug)
+    .map((article) => ({
+      slug: article.slug,
+    }));
 }
 
 interface Props {
@@ -28,9 +29,7 @@ export async function generateMetadata({ params }: Props) {
   const article = await getArticleBySlug(decodedSlug);
 
   if (!article) {
-    return {
-      title: "خبر یافت نشد | پالیز نیوز",
-    };
+    return { title: "خبر یافت نشد | پالیز نیوز" };
   }
 
   return {
@@ -66,12 +65,16 @@ export default async function NewsDetailPage({ params }: Props) {
   const decodedSlug = decodeURIComponent(slug);
   const article = await getArticleBySlug(decodedSlug);
 
-  if (!article) {
+  // اگر خبر پیدا نشد یا محتوای داخلی نداشت → 404
+  if (!article || !article.content_fa || article.content_fa.length < 100) {
     notFound();
   }
 
   const categoryInfo = CATEGORIES.find((cat) => cat.slug === article.category);
   const publishDate = formatDate(article.published_at || article.created_at);
+  const paragraphs = article.content_fa
+    .split("\n\n")
+    .filter((p) => p.trim().length > 0);
 
   return (
     <div className="min-h-screen flex flex-col bg-neutral-950">
@@ -80,7 +83,7 @@ export default async function NewsDetailPage({ params }: Props) {
       <main className="flex-1 site-container py-8 md:py-12">
         <article className="max-w-4xl mx-auto">
           {/* Breadcrumb */}
-          <nav className="flex items-center gap-2 text-sm text-neutral-500 mb-6">
+          <nav className="flex items-center gap-2 text-sm text-neutral-500 mb-6 flex-wrap">
             <Link href="/" className="hover:text-amber-400 transition-colors">
               خانه
             </Link>
@@ -112,7 +115,7 @@ export default async function NewsDetailPage({ params }: Props) {
           )}
 
           {/* Category & Date */}
-          <div className="flex items-center gap-3 mb-4">
+          <div className="flex items-center gap-3 mb-4 flex-wrap">
             {categoryInfo && (
               <Link
                 href={`/category/${article.category}`}
@@ -154,14 +157,12 @@ export default async function NewsDetailPage({ params }: Props) {
           {/* Featured Image */}
           {article.image_url && (
             <div className="relative w-full aspect-video mb-8 rounded-2xl overflow-hidden bg-neutral-900">
-              <Image
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
                 src={article.image_url}
                 alt={article.title_fa}
-                fill
-                className="object-cover"
-                sizes="(max-width: 768px) 100vw, 800px"
-                priority
-                unoptimized
+                className="w-full h-full object-cover"
+                loading="eager"
               />
             </div>
           )}
@@ -179,24 +180,21 @@ export default async function NewsDetailPage({ params }: Props) {
           )}
 
           {/* Content - متن کامل ترجمه شده */}
-          {article.content_fa && article.content_fa.length > 100 && (
+          {paragraphs.length > 0 && (
             <div className="prose prose-invert max-w-none mb-10">
               <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
                 <span className="w-1 h-6 bg-gradient-to-b from-amber-400 to-orange-500 rounded-full"></span>
                 متن کامل خبر
               </h3>
-              {article.content_fa
-                .split("\n\n")
-                .filter((p) => p.trim().length > 0)
-                .map((paragraph, index) => (
-                  <p
-                    key={index}
-                    className="text-base md:text-lg text-neutral-300 mb-6"
-                    style={{ lineHeight: "2.2" }}
-                  >
-                    {paragraph}
-                  </p>
-                ))}
+              {paragraphs.map((paragraph, index) => (
+                <p
+                  key={index}
+                  className="text-base md:text-lg text-neutral-300 mb-6"
+                  style={{ lineHeight: "2.2" }}
+                >
+                  {paragraph}
+                </p>
+              ))}
             </div>
           )}
 
