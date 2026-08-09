@@ -21,30 +21,27 @@ export default function Header() {
 
   return (
     <>
-      {/* Top Section - Not Sticky */}
+      {/* Top Section */}
       <div className="bg-black border-b border-neutral-800/50">
         <div className="site-container">
-          {/* Top Bar with Search + Stats */}
+          {/* Top Bar - Stats + Search */}
           <div className="flex items-center justify-between py-2 border-b border-neutral-900/50 gap-3">
-            {/* Stats Widget (سمت راست در RTL) */}
             <StatsWidget />
-
-            {/* Search Button */}
             <Link
               href="/search"
-              className="group flex items-center gap-2 px-4 py-2 rounded-xl bg-neutral-900 hover:bg-gradient-to-r hover:from-amber-500 hover:to-orange-600 border border-neutral-800 hover:border-transparent transition-all duration-300"
+              className="group flex items-center gap-2 px-3 py-2 rounded-xl bg-neutral-900 hover:bg-gradient-to-r hover:from-amber-500 hover:to-orange-600 border border-neutral-800 hover:border-transparent transition-all duration-300"
             >
               <Search className="w-4 h-4 text-neutral-400 group-hover:text-white transition-colors" />
-              <span className="text-sm text-neutral-400 group-hover:text-white transition-colors hidden sm:inline font-semibold">
+              <span className="text-xs sm:text-sm text-neutral-400 group-hover:text-white transition-colors font-semibold hidden sm:inline">
                 جستجو
               </span>
             </Link>
           </div>
 
-          {/* Logo Center */}
-          <div className="flex justify-center py-3 md:py-4">
+          {/* Logo - سایز کوچک‌تر در موبایل */}
+          <div className="flex justify-center py-2 md:py-4">
             <Link href="/" className="flex items-center justify-center group">
-              <div className="relative w-32 h-32 md:w-40 md:h-40 group-hover:scale-105 transition-transform duration-300">
+              <div className="relative w-20 h-20 md:w-32 md:h-32 lg:w-40 lg:h-40 group-hover:scale-105 transition-transform duration-300">
                 <Image
                   src="/logo.png"
                   alt="پالیز نیوز"
@@ -72,7 +69,7 @@ export default function Header() {
                 href="/"
                 className="flex items-center gap-2 ml-2 shrink-0 animate-fade-in"
               >
-                <div className="relative w-10 h-10">
+                <div className="relative w-8 h-8 md:w-10 md:h-10">
                   <Image
                     src="/logo.png"
                     alt="پالیز نیوز"
@@ -87,7 +84,7 @@ export default function Header() {
               <Link
                 key={cat.slug}
                 href={cat.slug === "all" ? "/" : `/category/${cat.slug}`}
-                className="nav-link-large whitespace-nowrap"
+                className="nav-link-large"
               >
                 {cat.name}
               </Link>
