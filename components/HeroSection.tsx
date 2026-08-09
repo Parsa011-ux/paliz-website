@@ -23,9 +23,21 @@ function timeAgo(dateStr: string): string {
   }
 }
 
+// چک دقیق برای اینکه محتوای واقعی داره یا نه
+function hasRealContent(content: string | null | undefined): boolean {
+  if (!content) return false;
+  if (typeof content !== "string") return false;
+  const trimmed = content.trim();
+  if (trimmed === "") return false;
+  if (trimmed === "null") return false;
+  if (trimmed === "undefined") return false;
+  if (trimmed.length < 200) return false;
+  return true;
+}
+
 // تشخیص اینکه خبر باید داخلی باز شه یا خارجی
 function hasInternalPage(article: Article): boolean {
-  return !!(article.content_fa && article.content_fa.length > 100);
+  return hasRealContent(article.content_fa);
 }
 
 // کامپوننت Wrapper هوشمند - داخلی یا خارجی
