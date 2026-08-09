@@ -34,7 +34,7 @@ export const metadata: Metadata = {
     description: "آخرین اخبار از معتبرترین منابع خبری",
     images: [
       {
-        url: "/logo.png",
+        url: "/web-app-manifest-512x512.png",
         width: 512,
         height: 512,
         alt: "پالیز نیوز",
@@ -45,12 +45,16 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "پالیز نیوز",
     description: "آخرین اخبار ایران و جهان",
-    images: ["/logo.png"],
+    images: ["/web-app-manifest-512x512.png"],
   },
   icons: {
-    icon: "/logo.png",
-    shortcut: "/logo.png",
-    apple: "/logo.png",
+    icon: [
+      { url: "/favicon.ico" },
+      { url: "/favicon.svg", type: "image/svg+xml" },
+      { url: "/favicon-96x96.png", sizes: "96x96", type: "image/png" },
+    ],
+    shortcut: "/favicon.ico",
+    apple: "/apple-touch-icon.png",
   },
 };
 
@@ -75,9 +79,10 @@ export default function RootLayout({
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
         <meta name="apple-mobile-web-app-title" content="پالیز نیوز" />
-       <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-       <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
-       <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png" />
+        <link rel="shortcut icon" href="/favicon.ico" />
       </head>
       <body className={`${vazirmatn.className} antialiased`}>
         <ProgressBar />
