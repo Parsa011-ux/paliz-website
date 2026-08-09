@@ -1,6 +1,6 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import { getArticleBySlug, getLatestArticles } from "@/lib/turso";
+import { getArticleBySlug, getArticlesPaginated } from "@/lib/turso";
 import { CATEGORIES } from "@/lib/types";
 import { notFound } from "next/navigation";
 import Link from "next/link";
@@ -8,11 +8,23 @@ import Link from "next/link";
 export const dynamic = "force-static";
 export const dynamicParams = false;
 
-// فقط 100 خبر آخر که content_fa دارن → صفحه داخلی می‌گیرن
+// چک دقیق برای اینکه محتوای واقعی داره یا نه
+function hasRealContent(content: string | null | undefined): boolean {
+  if (!content) return false;
+  if (typeof content !== "string") return false;
+  const trimmed = content.trim();
+  if (trimmed === "") return false;
+  if (trimmed === "null") return false;
+  if (trimmed === "undefined") return false;
+  if (trimmed.length < 200) return false;
+  return true;
+}
+
+// ساخت صفحه برای 500 خبر آخر که content_fa دارن
 export async function generateStaticParams() {
-  const articles = await getLatestArticles(100);
+  const articles = await getArticlesPaginated(1, 500);
   return articles
-    .filter((a) => a.content_fa && a.content_fa.length > 100 && a.slug)
+    .filter((a) => hasRealContent(a.content_fa) && a.slug)
     .map((article) => ({
       slug: article.slug,
     }));
@@ -65,13 +77,13 @@ export default async function NewsDetailPage({ params }: Props) {
   const decodedSlug = decodeURIComponent(slug);
   const article = await getArticleBySlug(decodedSlug);
 
-  if (!article || !article.content_fa || article.content_fa.length < 100) {
+  if (!article || !hasRealContent(article.content_fa)) {
     notFound();
   }
 
   const categoryInfo = CATEGORIES.find((cat) => cat.slug === article.category);
   const publishDate = formatDate(article.published_at || article.created_at);
-  const paragraphs = article.content_fa
+  const paragraphs = article.content_fa!
     .split("\n\n")
     .filter((p) => p.trim().length > 0);
 
@@ -182,7 +194,7 @@ export default async function NewsDetailPage({ params }: Props) {
               </div>
             )}
 
-            {/* Summary (خلاصه پررنگ) */}
+            {/* Summary */}
             {article.summary_fa && (
               <div className="mb-8 p-6 rounded-2xl bg-gradient-to-br from-amber-500/10 to-orange-500/5 border border-amber-500/20">
                 <p
@@ -194,7 +206,7 @@ export default async function NewsDetailPage({ params }: Props) {
               </div>
             )}
 
-            {/* Content - متن کامل ترجمه شده */}
+            {/* Content */}
             {paragraphs.length > 0 && (
               <div className="mb-10">
                 <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
