@@ -5,6 +5,7 @@ import Image from "next/image";
 import { Search } from "lucide-react";
 import { useEffect, useState } from "react";
 import { CATEGORIES } from "@/lib/types";
+import StatsWidget from "./StatsWidget";
 
 export default function Header() {
   const [scrolled, setScrolled] = useState(false);
@@ -23,8 +24,12 @@ export default function Header() {
       {/* Top Section - Not Sticky */}
       <div className="bg-black border-b border-neutral-800/50">
         <div className="site-container">
-          {/* Top Bar with Search only */}
-          <div className="flex items-center justify-end py-2 border-b border-neutral-900/50">
+          {/* Top Bar with Search + Stats */}
+          <div className="flex items-center justify-between py-2 border-b border-neutral-900/50 gap-3">
+            {/* Stats Widget (سمت راست در RTL) */}
+            <StatsWidget />
+
+            {/* Search Button */}
             <Link
               href="/search"
               className="group flex items-center gap-2 px-4 py-2 rounded-xl bg-neutral-900 hover:bg-gradient-to-r hover:from-amber-500 hover:to-orange-600 border border-neutral-800 hover:border-transparent transition-all duration-300"
