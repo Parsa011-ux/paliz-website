@@ -125,6 +125,7 @@ export async function searchArticles(
     return [];
   }
 }
+
 // دریافت اخبار بر اساس دسته‌بندی
 export async function getArticlesByCategory(
   category: string,
@@ -151,7 +152,52 @@ export async function getArticlesByCategory(
   }
 }
 
+// ============================================================
+// 🆕 توابع Pagination (جدید)
+// ============================================================
+
+// دریافت تعداد کل اخبار
+export async function getArticlesCount(): Promise<number> {
+  try {
+    const result = await turso.execute({
+      sql: `SELECT COUNT(*) as count FROM articles`,
+      args: [],
+    });
+    return Number((result.rows[0] as any)?.count) || 0;
+  } catch (error) {
+    console.error("خطا در شمارش اخبار:", error);
+    return 0;
+  }
+}
+
+// دریافت اخبار با pagination
+export async function getArticlesPaginated(
+  page: number = 1,
+  perPage: number = 50
+): Promise<Article[]> {
+  try {
+    const offset = (page - 1) * perPage;
+
+    const result = await turso.execute({
+      sql: `
+        SELECT * FROM articles
+        ORDER BY 
+          COALESCE(published_at, created_at) DESC
+        LIMIT ? OFFSET ?
+      `,
+      args: [perPage, offset],
+    });
+
+    return result.rows.map((row) => row as unknown as Article);
+  } catch (error) {
+    console.error("خطا در دریافت اخبار paginated:", error);
+    return [];
+  }
+}
+
+// ============================================================
 // دریافت لیست دسته‌بندی‌ها
+// ============================================================
 export async function getAllCategories(): Promise<string[]> {
   try {
     const result = await turso.execute({
