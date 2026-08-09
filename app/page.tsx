@@ -3,19 +3,27 @@ import Footer from "@/components/Footer";
 import NewsCard from "@/components/NewsCard";
 import NewsTicker from "@/components/NewsTicker";
 import HeroSection from "@/components/HeroSection";
-import { getLatestArticles, getBreakingNews } from "@/lib/turso";
+import Pagination from "@/components/Pagination";
+import {
+  getArticlesPaginated,
+  getBreakingNews,
+  getArticlesCount,
+} from "@/lib/turso";
 import type { Article } from "@/lib/types";
 
 export const dynamic = "force-static";
 
+const PER_PAGE = 50;
+
 export default async function HomePage() {
-  // گرفتن اخبار
-  const [articlesRaw, breakingNews] = await Promise.all([
-    getLatestArticles(50),        // 50 خبر آخر
-    getBreakingNews(10),          // 10 خبر فوری برای ticker
+  // گرفتن اخبار صفحه اول + خبر فوری + تعداد کل
+  const [articlesRaw, breakingNews, totalCount] = await Promise.all([
+    getArticlesPaginated(1, PER_PAGE),
+    getBreakingNews(10),
+    getArticlesCount(),
   ]);
 
-  // مرتب‌سازی همه اخبار بر اساس زمان (جدیدترین اول)
+  // مرتب‌سازی بر اساس زمان (جدیدترین اول)
   const articles = [...articlesRaw].sort((a, b) => {
     const dateA = new Date(a.published_at || a.created_at).getTime();
     const dateB = new Date(b.published_at || b.created_at).getTime();
@@ -23,23 +31,18 @@ export default async function HomePage() {
   });
 
   // پیدا کردن Hero: اولین خبر فوری با تصویر
-  // اگر خبر فوری با تصویر نبود → اولین خبر با تصویر
-  // اگر هیچ خبری با تصویر نبود → اولین خبر
   let featuredArticle: Article | undefined;
 
-  // اولویت 1: خبر فوری با تصویر
   featuredArticle = articles.find(
     (a) => a.is_breaking === 1 && a.image_url && a.image_url.trim().length > 0
   );
 
-  // اولویت 2: هر خبری با تصویر
   if (!featuredArticle) {
     featuredArticle = articles.find(
       (a) => a.image_url && a.image_url.trim().length > 0
     );
   }
 
-  // اولویت 3: اولین خبر
   if (!featuredArticle) {
     featuredArticle = articles[0];
   }
@@ -49,11 +52,11 @@ export default async function HomePage() {
     (a) => a.id !== featuredArticle?.id
   );
 
-  // 3 خبر بعدی به عنوان Secondary (کنار Hero)
   const secondaryArticles = remainingArticles.slice(0, 3);
-
-  // بقیه اخبار برای گرید پایین (به ترتیب زمانی)
   const restArticles = remainingArticles.slice(3);
+
+  // محاسبه تعداد کل صفحات
+  const totalPages = Math.ceil(totalCount / PER_PAGE);
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -88,7 +91,7 @@ export default async function HomePage() {
                 </h2>
               </div>
               <p className="text-sm text-neutral-500 font-semibold">
-                {restArticles.length} خبر
+                {totalCount.toLocaleString("fa-IR")} خبر کل
               </p>
             </div>
 
@@ -102,6 +105,9 @@ export default async function HomePage() {
                 </div>
               ))}
             </div>
+
+            {/* Pagination */}
+            <Pagination currentPage={1} totalPages={totalPages} />
           </>
         )}
       </main>
