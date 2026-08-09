@@ -25,12 +25,24 @@ function timeAgo(dateStr: string): string {
   }
 }
 
+// چک دقیق برای اینکه محتوای واقعی داره یا نه
+function hasRealContent(content: string | null | undefined): boolean {
+  if (!content) return false;
+  if (typeof content !== "string") return false;
+  const trimmed = content.trim();
+  if (trimmed === "") return false;
+  if (trimmed === "null") return false;
+  if (trimmed === "undefined") return false;
+  if (trimmed.length < 200) return false;
+  return true;
+}
+
 export default function NewsCard({ article }: Props) {
   const isBreaking = article.is_breaking === 1;
-  
-  // اگر خبر content_fa داره → لینک داخلی
-  // اگه نداره → لینک به منبع اصلی
-  const hasFullContent = article.content_fa && article.content_fa.length > 100;
+
+  // چک دقیق: خبر content_fa واقعی داره یا نه
+  const hasFullContent = hasRealContent(article.content_fa);
+
   const linkProps = hasFullContent
     ? { href: `/news/${article.slug}` as const }
     : {
