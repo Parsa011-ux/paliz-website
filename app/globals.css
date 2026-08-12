@@ -921,3 +921,185 @@ input, textarea, select {
     height: 15px;
   }
 }
+/* ============================================================
+   📰 News Card - Flip Effect
+   ============================================================ */
+.news-card {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  background-color: #0a0a0f;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  perspective: 1000px;
+  border: 2px solid #000000;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  cursor: pointer;
+  animation: fade-in-up 0.6s ease-out forwards;
+}
+
+.news-card:hover {
+  transform: scale(1.02);
+  box-shadow: 
+    0 20px 40px -15px rgba(245, 158, 11, 0.3),
+    0 0 0 2px rgba(245, 158, 11, 0.2);
+}
+
+.news-card__front {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.news-card__front img {
+  transition: transform 0.6s ease;
+}
+
+.news-card:hover .news-card__front img {
+  transform: scale(1.05);
+}
+
+.news-card__content {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  box-sizing: border-box;
+  background-color: #0a0a0f;
+  transform: rotateX(-90deg);
+  transform-origin: bottom;
+  transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  z-index: 5;
+  border: 2px solid rgba(245, 158, 11, 0.3);
+  border-radius: 14px;
+}
+
+/* Hover در دسکتاپ */
+@media (hover: hover) {
+  .news-card:hover .news-card__content {
+    transform: rotateX(0deg);
+  }
+}
+
+/* Click state در موبایل */
+.news-card.flipped .news-card__content {
+  transform: rotateX(0deg);
+}
+
+.news-card__inner {
+  width: 100%;
+  height: 100%;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  direction: rtl;
+}
+
+.news-card__title {
+  margin: 0;
+  font-size: 16px;
+  color: #ffffff;
+  font-weight: 700;
+  line-height: 1.7;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.news-card__description {
+  margin: 12px 0 0 0;
+  font-size: 13px;
+  color: #a3a3a3;
+  line-height: 1.8;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  flex: 1;
+}
+
+.news-card__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding-top: 12px;
+  margin-top: auto;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  font-size: 11px;
+}
+
+.news-card__source {
+  color: #d4d4d8;
+  font-weight: 600;
+  min-width: 0;
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.news-card__time {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: #737373;
+  white-space: nowrap;
+}
+
+.news-card__hint {
+  position: absolute;
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 10px;
+  color: #f59e0b;
+  background: rgba(245, 158, 11, 0.1);
+  padding: 4px 12px;
+  border-radius: 100px;
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  white-space: nowrap;
+}
+
+/* Hover در دسکتاپ - hint نمایش داده نشه */
+@media (hover: hover) {
+  .news-card__hint {
+    display: none;
+  }
+}
+
+/* 📱 موبایل - سایز فونت کوچیک‌تر */
+@media (max-width: 640px) {
+  .news-card__title {
+    font-size: 14px;
+    -webkit-line-clamp: 2;
+  }
+  
+  .news-card__description {
+    font-size: 12px;
+    -webkit-line-clamp: 3;
+  }
+  
+  .news-card__footer {
+    font-size: 10px;
+  }
+  
+  .news-card__inner {
+    padding: 16px;
+  }
+}
+
+/* در tablet */
+@media (min-width: 641px) and (max-width: 1023px) {
+  .news-card__title {
+    font-size: 15px;
+  }
+}
