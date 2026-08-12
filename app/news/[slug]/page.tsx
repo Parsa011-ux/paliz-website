@@ -84,7 +84,7 @@ export default async function NewsDetailPage({ params }: Props) {
     .filter((p) => p.trim().length > 0);
 
   return (
-    <div className="min-h-screen flex flex-col bg-neutral-950">
+    <div className="min-h-screen flex flex-col">
       <Header />
 
       <main className="flex-1 py-8 md:py-12" style={{ width: "100%" }}>
