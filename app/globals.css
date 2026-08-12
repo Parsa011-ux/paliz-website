@@ -1049,3 +1049,36 @@ input, textarea, select {
     font-size: 15px;
   }
 }
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: 
+    radial-gradient(circle at 15% 20%, rgba(245, 158, 11, 0.06) 0%, transparent 40%),
+    radial-gradient(circle at 85% 80%, rgba(239, 68, 68, 0.04) 0%, transparent 40%),
+    radial-gradient(circle at 50% 50%, rgba(139, 92, 246, 0.03) 0%, transparent 60%);
+  z-index: -2;
+  pointer-events: none;
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: 
+    linear-gradient(rgba(255, 255, 255, 0.015) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
+  background-size: 60px 60px;
+  z-index: -1;
+  pointer-events: none;
+  mask-image: radial-gradient(ellipse at center, black 30%, transparent 100%);
+  -webkit-mask-image: radial-gradient(ellipse at center, black 30%, transparent 100%);
+}
+
+/* 📱 در موبایل background pattern رو ساده‌تر کن */
+@media (max-width: 767px) {
+  body::after {
+    background-size: 40px 40px;
+    opacity: 0.5;
+  }
+}
