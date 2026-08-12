@@ -8,7 +8,6 @@ import Link from "next/link";
 export const dynamic = "force-static";
 export const dynamicParams = false;
 
-// چک دقیق برای اینکه محتوای واقعی داره یا نه
 function hasRealContent(content: string | null | undefined): boolean {
   if (!content) return false;
   if (typeof content !== "string") return false;
@@ -20,7 +19,6 @@ function hasRealContent(content: string | null | undefined): boolean {
   return true;
 }
 
-// ساخت صفحه برای 500 خبر آخر که content_fa دارن
 export async function generateStaticParams() {
   const articles = await getArticlesPaginated(1, 500);
   return articles
@@ -34,7 +32,6 @@ interface Props {
   params: Promise<{ slug: string }>;
 }
 
-// SEO Metadata
 export async function generateMetadata({ params }: Props) {
   const { slug } = await params;
   const decodedSlug = decodeURIComponent(slug);
@@ -55,7 +52,6 @@ export async function generateMetadata({ params }: Props) {
   };
 }
 
-// فرمت تاریخ به فارسی
 function formatDate(dateString: string | null): string {
   if (!dateString) return "";
   try {
@@ -225,34 +221,33 @@ export default async function NewsDetailPage({ params }: Props) {
               </div>
             )}
 
-           {/* Source Button */}
-<div className="mt-10 p-6 rounded-2xl bg-neutral-900 border border-neutral-800 text-center">
-  <p className="text-neutral-400 text-sm mb-6">
-    برای مطالعه متن اصلی و کامل خبر به منبع مراجعه کنید:
-  </p>
-  <a
-    href={article.link}
-    target="_blank"
-    rel="noopener noreferrer"
-    className="view-source-btn"
-  >
-    <span>
-      READ FULL ARTICLE
-      <svg
-        fill="none"
-        stroke="currentColor"
-        viewBox="0 0 24 24"
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth={2}
-          d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-        />
-      </svg>
-    </span>
-  </a>
-</div>
+            {/* Source Button */}
+            <div className="mt-10 p-6 rounded-2xl bg-neutral-900 border border-neutral-800 text-center">
+              <p className="text-neutral-400 text-sm mb-6">
+                برای مطالعه متن اصلی و کامل خبر به منبع مراجعه کنید:
+              </p>
+              <a
+                href={article.link}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="view-source-btn"
+              >
+                <span>
+                  READ FULL ARTICLE
+                  <svg
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+                    />
+                  </svg>
+                </span>
+              </a>
             </div>
 
             {/* Back to Home */}
