@@ -7,7 +7,6 @@ export default function ScrollToTop() {
 
   useEffect(() => {
     const handleScroll = () => {
-      // اگه بیشتر از 300 پیکسل اسکرول کرد، دکمه نشون داده بشه
       setVisible(window.scrollY > 300);
     };
 
@@ -27,32 +26,15 @@ export default function ScrollToTop() {
   return (
     <button
       onClick={scrollToTop}
-      className="scroll-to-top-btn"
-      aria-label="برو به بالا"
+      className="scroll-top-btn"
+      aria-label="Back to Top"
     >
-      <div className="text">
-        <span>ب</span>
-        <span>ا</span>
-        <span>ل</span>
-        <span>ا</span>
-      </div>
-      <div className="clone">
-        <span>ب</span>
-        <span>ا</span>
-        <span>ل</span>
-        <span>ا</span>
-      </div>
       <svg
+        className="svgIcon"
+        viewBox="0 0 384 512"
         xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
       >
-        <line x1="5" y1="12" x2="19" y2="12"></line>
-        <polyline points="12 5 19 12 12 19"></polyline>
+        <path d="M214.6 41.4c-12.5-12.5-32.8-12.5-45.3 0l-160 160c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L160 141.2V448c0 17.7 14.3 32 32 32s32-14.3 32-32V141.2L329.4 246.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3l-160-160z" />
       </svg>
     </button>
   );
