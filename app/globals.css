@@ -1272,3 +1272,79 @@ input, textarea, select {
     animation: none;
   }
 }
+/* ============================================================
+   ⬅️ Go Back Button (دکمه بازگشت)
+   ============================================================ */
+.go-back-btn {
+  background-color: #ffffff;
+  text-align: center;
+  width: 192px;
+  border-radius: 16px;
+  height: 56px;
+  position: relative;
+  color: #000000;
+  font-size: 20px;
+  font-weight: 600;
+  border: 4px solid #ffffff;
+  cursor: pointer;
+  display: block;
+  overflow: hidden;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.go-back-btn__icon {
+  background: linear-gradient(135deg, #f59e0b, #ef4444);
+  border-radius: 12px;
+  height: 40px;
+  width: 25%;
+  display: grid;
+  place-items: center;
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 10;
+  transition: width 0.5s ease;
+  color: #ffffff;
+}
+
+.go-back-btn:hover .go-back-btn__icon {
+  width: 100%;
+}
+
+.go-back-btn__icon svg {
+  transition: transform 0.3s ease;
+}
+
+.go-back-btn:hover .go-back-btn__icon svg {
+  transform: translateX(-4px);
+}
+
+.go-back-btn__text {
+  transform: translateX(16px);
+  transition: color 0.5s ease;
+  line-height: 48px;
+  margin: 0;
+}
+
+.go-back-btn:hover .go-back-btn__text {
+  color: #ffffff;
+  transform: translateX(16px);
+}
+
+/* 📱 موبایل - سایز کوچیک‌تر */
+@media (max-width: 640px) {
+  .go-back-btn {
+    width: 170px;
+    height: 50px;
+    font-size: 18px;
+  }
+  
+  .go-back-btn__icon {
+    height: 34px;
+  }
+  
+  .go-back-btn__text {
+    line-height: 42px;
+  }
+}
