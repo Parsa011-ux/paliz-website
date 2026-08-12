@@ -1,5 +1,8 @@
+"use client";
+
 import { Clock, Zap } from "lucide-react";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useState, useRef, useEffect } from "react";
 import type { Article } from "@/lib/types";
 
 interface Props {
@@ -25,7 +28,6 @@ function timeAgo(dateStr: string): string {
   }
 }
 
-// چک دقیق برای اینکه محتوای واقعی داره یا نه
 function hasRealContent(content: string | null | undefined): boolean {
   if (!content) return false;
   if (typeof content !== "string") return false;
@@ -39,28 +41,76 @@ function hasRealContent(content: string | null | undefined): boolean {
 
 export default function NewsCard({ article }: Props) {
   const isBreaking = article.is_breaking === 1;
+  const router = useRouter();
+  const [isFlipped, setIsFlipped] = useState(false);
+  const cardRef = useRef<HTMLDivElement>(null);
 
-  // چک دقیق: خبر content_fa واقعی داره یا نه
+  // چک کن آیا محتوای واقعی داره
   const hasFullContent = hasRealContent(article.content_fa);
 
-  const linkProps = hasFullContent
-    ? { href: `/news/${article.slug}` as const }
-    : {
-        href: article.link,
-        target: "_blank" as const,
-        rel: "noopener noreferrer" as const,
-      };
+  // تشخیص موبایل (touch device)
+  const [isTouchDevice, setIsTouchDevice] = useState(false);
 
-  const CardContent = (
-    <>
-      {/* Image */}
-      <div className="relative aspect-[16/10] overflow-hidden bg-neutral-800 flex-shrink-0">
+  useEffect(() => {
+    const checkTouch = () => {
+      setIsTouchDevice("ontouchstart" in window || navigator.maxTouchPoints > 0);
+    };
+    checkTouch();
+  }, []);
+
+  // بستن کارت وقتی بیرون کلیک کرد
+  useEffect(() => {
+    if (!isFlipped) return;
+
+    const handleClickOutside = (e: MouseEvent | TouchEvent) => {
+      if (cardRef.current && !cardRef.current.contains(e.target as Node)) {
+        setIsFlipped(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("touchstart", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("touchstart", handleClickOutside);
+    };
+  }, [isFlipped]);
+
+  const handleClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+
+    // موبایل: کلیک اول → flip، کلیک دوم → لینک
+    if (isTouchDevice) {
+      if (!isFlipped) {
+        setIsFlipped(true);
+        return;
+      }
+    }
+
+    // بره به لینک (داخلی یا خارجی)
+    if (hasFullContent) {
+      router.push(`/news/${article.slug}`);
+    } else {
+      window.open(article.link, "_blank", "noopener,noreferrer");
+    }
+  };
+
+  return (
+    <div
+      ref={cardRef}
+      onClick={handleClick}
+      className={`news-card group ${isFlipped ? "flipped" : ""}`}
+      role="button"
+      tabIndex={0}
+    >
+      {/* Front - تصویر */}
+      <div className="news-card__front">
         {article.image_url ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img
             src={article.image_url}
             alt={article.title_fa}
-            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+            className="w-full h-full object-cover"
             loading="lazy"
           />
         ) : (
@@ -71,20 +121,22 @@ export default function NewsCard({ article }: Props) {
           </div>
         )}
 
+        {/* Breaking Badge */}
         {isBreaking && (
-          <div className="absolute top-3 right-3 flex items-center gap-1 px-2.5 py-1 rounded-md bg-red-600 text-white text-[10px] font-bold pulse-breaking shadow-lg">
+          <div className="absolute top-3 right-3 flex items-center gap-1 px-2.5 py-1 rounded-md bg-red-600 text-white text-[10px] font-bold pulse-breaking shadow-lg z-10">
             <Zap className="w-2.5 h-2.5" fill="currentColor" />
             <span>فوری</span>
           </div>
         )}
 
-        <div className={`cat-bg-${article.category} absolute top-3 left-3 px-2.5 py-1 rounded-md text-white text-[10px] font-bold shadow-lg`}>
+        {/* Category Badge */}
+        <div className={`cat-bg-${article.category} absolute top-3 left-3 px-2.5 py-1 rounded-md text-white text-[10px] font-bold shadow-lg z-10`}>
           {article.category}
         </div>
 
         {/* نشانگر لینک خارجی */}
         {!hasFullContent && (
-          <div className="absolute bottom-3 left-3 flex items-center gap-1 px-2 py-1 rounded-md bg-black/70 backdrop-blur-sm text-white text-[10px] font-bold">
+          <div className="absolute bottom-3 left-3 flex items-center gap-1 px-2 py-1 rounded-md bg-black/70 backdrop-blur-sm text-white text-[10px] font-bold z-10">
             <svg className="w-2.5 h-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
             </svg>
@@ -93,52 +145,37 @@ export default function NewsCard({ article }: Props) {
         )}
       </div>
 
-      {/* Content */}
-      <div className="flex flex-col flex-1 p-5 gap-3">
-        <h3
-          className="text-base md:text-lg font-bold text-white line-clamp-2 group-hover:text-amber-400 transition-colors"
-          style={{ lineHeight: '1.7' }}
-        >
-          {article.title_fa}
-        </h3>
+      {/* Back - محتوا (با hover یا کلیک باز میشه) */}
+      <div className="news-card__content">
+        <div className="news-card__inner">
+          <h3 className="news-card__title">
+            {article.title_fa}
+          </h3>
 
-        {article.summary_fa && article.summary_fa.length > 0 && (
-          <p
-            className="text-sm text-neutral-400 line-clamp-2 flex-1"
-            style={{ lineHeight: '1.9' }}
-          >
-            {article.summary_fa}
-          </p>
-        )}
+          {article.summary_fa && article.summary_fa.length > 0 && (
+            <p className="news-card__description">
+              {article.summary_fa}
+            </p>
+          )}
 
-        <div className="flex items-center justify-between pt-3 mt-auto border-t border-neutral-800/50 text-xs gap-3">
-          <span className="font-semibold text-neutral-300 min-w-0 flex-1 truncate">
-            {article.source_name_fa}
-          </span>
-          <span className="flex items-center gap-1 text-neutral-500 shrink-0">
-            <Clock className="w-3 h-3" />
-            <span className="whitespace-nowrap">{timeAgo(article.created_at)}</span>
-          </span>
+          <div className="news-card__footer">
+            <span className="news-card__source">
+              {article.source_name_fa}
+            </span>
+            <span className="news-card__time">
+              <Clock className="w-3 h-3" />
+              <span>{timeAgo(article.created_at)}</span>
+            </span>
+          </div>
+
+          {/* Hint در موبایل */}
+          {isTouchDevice && isFlipped && (
+            <div className="news-card__hint">
+              دوباره کلیک کنید تا خبر باز شود
+            </div>
+          )}
         </div>
       </div>
-    </>
-  );
-
-  const cardClass = "group flex flex-col h-full rounded-2xl overflow-hidden bg-neutral-900/80 border border-neutral-800/80 hover:border-neutral-700 transition-all duration-300 animate-fade-in card-glow backdrop-blur-sm";
-
-  // اگر لینک داخلی → از Next Link
-  if (hasFullContent) {
-    return (
-      <Link href={linkProps.href} className={cardClass}>
-        {CardContent}
-      </Link>
-    );
-  }
-
-  // اگه لینک خارجی → از <a>
-  return (
-    <a {...linkProps} className={cardClass}>
-      {CardContent}
-    </a>
+    </div>
   );
 }
