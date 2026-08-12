@@ -726,7 +726,7 @@ input, textarea, select {
     0 0 0 1px rgba(245, 158, 11, 0.2);
   animation: fade-in-up 0.4s ease-out;
   font-family: inherit;
-  direction: rtl;
+  direction: ltr;
 }
 
 .scroll-to-top-btn > div,
@@ -760,10 +760,11 @@ input, textarea, select {
 .scroll-to-top-btn .clone > *,
 .scroll-to-top-btn .text > * {
   opacity: 1;
-  font-size: 1.1rem;
+  font-size: 1rem;
   font-weight: 700;
   transition: 0.2s;
-  margin-left: 2px;
+  margin-left: 1px;
+  letter-spacing: 0.05em;
 }
 
 .scroll-to-top-btn .clone > * {
@@ -783,25 +784,33 @@ input, textarea, select {
 }
 
 .scroll-to-top-btn:hover .clone > :nth-child(1) {
-  transition-delay: 0.15s;
+  transition-delay: 0.1s;
 }
 
 .scroll-to-top-btn:hover .clone > :nth-child(2) {
-  transition-delay: 0.2s;
+  transition-delay: 0.15s;
 }
 
 .scroll-to-top-btn:hover .clone > :nth-child(3) {
-  transition-delay: 0.25s;
+  transition-delay: 0.2s;
 }
 
 .scroll-to-top-btn:hover .clone > :nth-child(4) {
+  transition-delay: 0.25s;
+}
+
+.scroll-to-top-btn:hover .clone > :nth-child(5) {
   transition-delay: 0.3s;
 }
 
-/* Icon (رو به بالا میره) */
+.scroll-to-top-btn:hover .clone > :nth-child(6) {
+  transition-delay: 0.35s;
+}
+
+/* Icon */
 .scroll-to-top-btn svg {
-  width: 20px;
-  height: 20px;
+  width: 18px;
+  height: 18px;
   right: 12px;
   top: 50%;
   transform: translateY(-50%) rotate(-140deg);
@@ -824,12 +833,12 @@ input, textarea, select {
   
   .scroll-to-top-btn .clone > *,
   .scroll-to-top-btn .text > * {
-    font-size: 0.95rem;
+    font-size: 0.85rem;
   }
   
   .scroll-to-top-btn svg {
-    width: 16px;
-    height: 16px;
+    width: 14px;
+    height: 14px;
     right: 10px;
   }
 }
