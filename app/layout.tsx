@@ -3,6 +3,7 @@ import { Vazirmatn } from "next/font/google";
 import "./globals.css";
 import ProgressBar from "@/components/ProgressBar";
 import PWAInstaller from "@/components/PWAInstaller";
+import ScrollToTop from "@/components/ScrollToTop";
 
 const vazirmatn = Vazirmatn({
   subsets: ["arabic"],
@@ -88,6 +89,7 @@ export default function RootLayout({
         <ProgressBar />
         {children}
         <PWAInstaller />
+        <ScrollToTop />
       </body>
     </html>
   );
