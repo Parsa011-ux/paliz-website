@@ -225,34 +225,34 @@ export default async function NewsDetailPage({ params }: Props) {
               </div>
             )}
 
-            {/* Source Button */}
-            <div className="mt-10 p-6 rounded-2xl bg-neutral-900 border border-neutral-800">
-              <p className="text-neutral-400 text-sm mb-3">
-                برای مطالعه متن اصلی و کامل خبر به منبع مراجعه کنید:
-              </p>
-              <a
-                href={article.link}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 text-white font-bold hover:from-amber-600 hover:to-orange-600 transition-all"
-              >
-                <span>
-                  📖 مشاهده در {article.source_name_fa || article.source_name}
-                </span>
-                <svg
-                  className="w-4 h-4"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-                  />
-                </svg>
-              </a>
+           {/* Source Button */}
+<div className="mt-10 p-6 rounded-2xl bg-neutral-900 border border-neutral-800 text-center">
+  <p className="text-neutral-400 text-sm mb-6">
+    برای مطالعه متن اصلی و کامل خبر به منبع مراجعه کنید:
+  </p>
+  <a
+    href={article.link}
+    target="_blank"
+    rel="noopener noreferrer"
+    className="view-source-btn"
+  >
+    <span>
+      READ FULL ARTICLE
+      <svg
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth={2}
+          d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+        />
+      </svg>
+    </span>
+  </a>
+</div>
             </div>
 
             {/* Back to Home */}
