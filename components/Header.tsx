@@ -2,10 +2,10 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { Search } from "lucide-react";
 import { useEffect, useState } from "react";
 import { CATEGORIES } from "@/lib/types";
 import StatsWidget from "./StatsWidget";
+import SearchBar from "./SearchBar";
 
 export default function Header() {
   const [scrolled, setScrolled] = useState(false);
@@ -27,15 +27,7 @@ export default function Header() {
           {/* Top Bar - Stats + Search */}
           <div className="flex items-center justify-between py-2 border-b border-neutral-900/50 gap-3">
             <StatsWidget />
-            <Link
-              href="/search"
-              className="group flex items-center gap-2 px-3 py-2 rounded-xl bg-neutral-900 hover:bg-gradient-to-r hover:from-amber-500 hover:to-orange-600 border border-neutral-800 hover:border-transparent transition-all duration-300"
-            >
-              <Search className="w-4 h-4 text-neutral-400 group-hover:text-white transition-colors" />
-              <span className="text-xs sm:text-sm text-neutral-400 group-hover:text-white transition-colors font-semibold hidden sm:inline">
-                جستجو
-              </span>
-            </Link>
+            <SearchBar />
           </div>
 
           {/* Logo - سایز کوچک‌تر در موبایل */}
