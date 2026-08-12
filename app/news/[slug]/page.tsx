@@ -222,33 +222,30 @@ export default async function NewsDetailPage({ params }: Props) {
             )}
 
             {/* Source Button */}
-            <div className="mt-10 p-6 rounded-2xl bg-neutral-900 border border-neutral-800 text-center">
-              <p className="text-neutral-400 text-sm mb-6">
-                برای مطالعه متن اصلی و کامل خبر به منبع مراجعه کنید:
-              </p>
-              <a
-                href={article.link}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="view-source-btn"
-              >
-                <span>
-                  READ FULL ARTICLE
-                  <svg
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-                    />
-                  </svg>
-                </span>
-              </a>
-            </div>
+<div className="mt-10 flex justify-center">
+  <a
+    href={article.link}
+    target="_blank"
+    rel="noopener noreferrer"
+    className="view-source-btn"
+  >
+    <span>
+      READ ARTICLE
+      <svg
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth={2}
+          d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+        />
+      </svg>
+    </span>
+  </a>
+</div>
 
             {/* Back to Home */}
             <div className="mt-8 text-center">
